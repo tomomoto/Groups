@@ -43,11 +43,6 @@ public class Group extends AbstractGroup {
         m_tripleLongArrayList.Add(group.get_tripleLongArrayList());
     }
 
-    /*@Override
-    public boolean IsUnique(TripleLong tripleLong) {
-        return super.IsUnique(tripleLong);
-    }*/
-
     public Group GetGroupAndRemove(TripleLong tripleLong) {
         TripleLongHashSet tripleLongHashSet = new TripleLongHashSet(tripleLong);
         TripleLongArrayList tripleLongArrayList = new TripleLongArrayList(tripleLong);

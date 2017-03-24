@@ -12,11 +12,8 @@ public class GroupTest {
     public void testContains() throws Exception {
         CSVReader reader = new CSVReader(new FileReader("Lng.csv"), ';');
         String[] nextLine;
-        LinkedList<TripleLong> longs = new LinkedList<>();
         Computator cmp = new Computator(new TripleLong(1l,2l,3l));
         int i = 0;
-        //TripleLong tpl1 = new TripleLong(1l,2l,3l);
-        //cmp.Add(tpl1);
         TripleLong tpl2 = new TripleLong(4l,4l,3l);
         cmp.Add(tpl2);
         TripleLong tpl3 = new TripleLong(5l,6l,7l);
@@ -32,7 +29,6 @@ public class GroupTest {
             } catch (Exception e) {
                 a=0l;
             }
-
             try {
                 b = Long.valueOf(nextLine[1]);
             } catch (Exception e) {
@@ -45,49 +41,11 @@ public class GroupTest {
             }
             TripleLong trpLng = new TripleLong(a, b, c);
             cmp.Add(trpLng);
-            //System.out.println(j);
-            //longs.add(trpLng);
             //i++;
             //System.out.println(i);
         }
-        //TripleLong tp5 = new TripleLong(9l,6l,3l);
-        //cmp.Add(tp5);
-        /*int j=0;
-        for (TripleLong tripleLong : longs) {
-            cmp.Add(tripleLong);
-            System.out.println(j);
-            j++;
-        }*/
-
-//        Collections.sort(cmp.getGroupedElementsList(), new Comparator<GroupedElements>() {
-//            @Override
-//            public int compare(GroupedElements o1, GroupedElements o2) {
-//                return o2.return_string_list().size() - o1.return_string_list().size();
-//            }
-//        });
-
-
         Collections.sort(cmp.getListOfGroupedElements().getGroups(),
                 (o1, o2) -> o2.get_tripleLongArrayList().Size() - o1.get_tripleLongArrayList().Size());
-
-        /*ArrayList<GroupedElements> groups = new ArrayList<>();
-
-
-
-        TripleLong tripleLong = new TripleLong(1l, 1l, 1l);
-        groups.add(new GroupedElements(tripleLong));
-        computation(longs, groups);
-        Collections.sort(groups, new Comparator<GroupedElements>() {
-            @Override
-            public int compare(GroupedElements o1, GroupedElements o2) {
-                return o2.return_string_list().size() - o1.return_string_list().size();
-            }
-        });*/
         assertEquals("Expected size is 1989", 1989, cmp.getListOfGroupedElements().getGroups().size());
-    }
-
-    @Test
-    public void testAdd() throws Exception {
-
     }
 }
