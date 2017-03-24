@@ -68,7 +68,7 @@ public class ListOfGroupedElements {
                     listsAlreadyMerged=true;
                 }
                 if (mergingIndexList.size() == 2) {
-                    System.out.println("Merging triplelong");
+                    //System.out.println("Merging triplelong");
                     groups.get(mergingIndexList.get(0)).Add(groups.get(mergingIndexList.get(1)));
                     mergingIndexList.remove(1);
                     groups.remove(i - removedGroups);
@@ -90,7 +90,7 @@ public class ListOfGroupedElements {
                     listsAlreadyMerged=true;
                 }
                 if (mergingIndexList.size() == 2) {
-                    System.out.println("Merging groups");
+                    //System.out.println("Merging groups");
                     groups.get(mergingIndexList.get(0)).Add(groups.get(mergingIndexList.get(1)));
                     mergingIndexList.remove(1);
                     groups.remove(i - removedGroups);
