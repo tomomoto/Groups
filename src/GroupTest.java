@@ -10,6 +10,7 @@ public class GroupTest {
 
     @Test
     public void testContains() throws Exception {
+        long start = System.currentTimeMillis();
         CSVReader reader = new CSVReader(new FileReader("Lng.csv"), ';');
         String[] nextLine;
         Computator cmp = new Computator(new TripleLong(1l,2l,3l));
@@ -46,6 +47,9 @@ public class GroupTest {
         }
         Collections.sort(cmp.getListOfGroupedElements().getGroups(),
                 (o1, o2) -> o2.get_tripleLongArrayList().Size() - o1.get_tripleLongArrayList().Size());
+        long finish = System.currentTimeMillis();
+        float timeConsumedSec = (finish - start)/1000F;
+        System.out.println("Время выполнения: "+timeConsumedSec+" секунд");
         assertEquals("Expected size is 1989", 1989, cmp.getListOfGroupedElements().getGroups().size());
     }
 }
