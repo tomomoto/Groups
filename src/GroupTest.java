@@ -10,6 +10,7 @@ public class GroupTest {
 
     @Test
     public void testContains() throws Exception {
+        System.out.println("Начато...");
         long start = System.currentTimeMillis();
         CSVReader reader = new CSVReader(new FileReader("Lng.csv"), ';');
         String[] nextLine;
