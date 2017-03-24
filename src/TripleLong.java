@@ -42,6 +42,16 @@ public class TripleLong {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return (a.toString()+'a'+b.toString()+'b'+c.toString()+'c').hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this==obj)
+                return true;
+        TripleLong tripleLong = (TripleLong) obj;
+        if (a == tripleLong.getA() && b == tripleLong.getB() && c == tripleLong.getC())
+            return true;
+        return false;
     }
 }

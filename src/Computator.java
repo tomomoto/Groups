@@ -1,132 +1,73 @@
-import java.util.ArrayList;
-import java.util.HashSet;
 
-/**
- * Created by Tom on 23.03.2017.
- */
 public class Computator {
 
-    private FrontGroup frontGroup;
-    private FrontGroup deepFrontGroup;
-    private ArrayList<BackGroup> backGroupList;
+    private Group uniqueElementsGroup;
 
-    public FrontGroup getFrontGroup() {
-        return frontGroup;
+    private ListOfGroupedElements listOfGroupedElements;
+
+    public ListOfGroupedElements getListOfGroupedElements() {
+        return listOfGroupedElements;
     }
 
-    public void setFrontGroup(FrontGroup frontGroup) {
-        this.frontGroup = frontGroup;
+    public Computator(TripleLong tripleLong) {
+        uniqueElementsGroup = new Group(tripleLong);
+        listOfGroupedElements = new ListOfGroupedElements();
     }
 
-    public ArrayList<BackGroup> getBackGroupList() {
-        return backGroupList;
+    public void setListOfGroupedElements(ListOfGroupedElements listOfGroupedElements) {
+        this.listOfGroupedElements = listOfGroupedElements;
     }
 
-    public void setBackGroupList(ArrayList<BackGroup> backGroupList) {
-        this.backGroupList = backGroupList;
+    public Group getUniqueElementsGroup() {
+        return uniqueElementsGroup;
+    }
+
+    public void setUniqueElementsGroup(Group uniqueElementsGroup) {
+        this.uniqueElementsGroup = uniqueElementsGroup;
     }
 
     public Computator() {
-        frontGroup = new FrontGroup();
-        backGroupList = new ArrayList<>();
-        deepFrontGroup = new FrontGroup();
+        uniqueElementsGroup = new Group();
+        listOfGroupedElements = new ListOfGroupedElements();
     }
 
-    public Computator(FrontGroup frontGroup, ArrayList<BackGroup> backGroup, FrontGroup deepFrontGroup) {
-        this.frontGroup = frontGroup;
-        this.backGroupList = backGroup;
-        this.deepFrontGroup = deepFrontGroup;
+    public Computator(Group uniqueElementsGroup, ListOfGroupedElements listOfGroupedElements) {
+        this.uniqueElementsGroup = uniqueElementsGroup;
+        this.listOfGroupedElements = listOfGroupedElements;
     }
 
     public void Add(TripleLong tripleLong){
-        TripleLongHashSet tlhs = new TripleLongHashSet();
-        TripleLongArrayList tlal = new TripleLongArrayList();
-        TripleLongHashSet hs = frontGroup.get_tripleLongHashSet();
-        Long a1 = tripleLong.getA();
-        Long b1 = tripleLong.getB();
-        Long c1 = tripleLong.getC();
-        TripleLongArrayList tripleLongArrayList = frontGroup.getTripleLongArrayList();
-        boolean setContainsA = hs.ALongSet.contains(a1) && a1!= 0L;
-        if (setContainsA){
-            int i = tripleLongArrayList.GetIndexByA(a1);
-            Long bLong = tripleLongArrayList.getBArray().get(i);
-            Long cLong = tripleLongArrayList.getCArray().get(i);
-            tlhs.Add(a1,bLong,cLong);
-            tlal.Add(a1,bLong,cLong);
-            frontGroup.RemoveFromA(a1, bLong, cLong);
-        }
-        boolean setContainsB = hs.BLongSet.contains(b1) && b1!= 0L;
-        if (setContainsB ){
-            int i = tripleLongArrayList.GetIndexByB(b1);
-            Long aLong = tripleLongArrayList.getAArray().get(i);
-            Long cLong = tripleLongArrayList.getCArray().get(i);
-            tlhs.Add(aLong,b1,cLong);
-            tlal.Add(aLong,b1,cLong);
-            frontGroup.RemoveFromB(aLong, b1, cLong);
-        }
-        boolean setContainsC = hs.CLongSet.contains(c1) && c1!= 0L;
-        if (setContainsC){
-            int i = tripleLongArrayList.GetIndexByC(c1);
-            Long bLong = tripleLongArrayList.getBArray().get(i);
-            Long aLong = tripleLongArrayList.getAArray().get(i);
-            tlhs.Add(aLong,bLong,c1);
-            tlal.Add(aLong,bLong,c1);
-            frontGroup.RemoveFromC(aLong, bLong, c1);
-        }
-        if (setContainsA || setContainsB || setContainsC) {
-            tlhs.Add(tripleLong);
-            tlal.Add(tripleLong);
-            boolean merging = false;
-            ArrayList<Integer> counter = new ArrayList<>();
-            int offset = 0;
-            for (int i = 0; i < backGroupList.size(); i++) {
-                if (backGroupList.get(i - offset).CanMerge(tlhs)) {
-                    counter.add(i - offset);
-                    merging = true;
-                    backGroupList.get(counter.get(0)).Merge(tlhs,tlal);
-                    if (counter.size() == 2) {
-                        System.out.println("Merging groups");
-                        backGroupList.get(counter.get(0)).Merge(backGroupList.get(counter.get(1)));
-                        counter.remove(1);
-                        backGroupList.remove(i - offset);
-                        offset++;
-                    }
+        if (!uniqueElementsGroup.IsUnique(tripleLong)){
+            //Трипллонг неуникален для первого списка. Сформировать группу и отправить на проверку в глубокую группу.
+            Group removed = uniqueElementsGroup.GetGroupAndRemove(tripleLong);
+            if (listOfGroupedElements.getGroups().size()==0)
+                listOfGroupedElements.AddGroup(removed);
+            else
+            {
+                //Проверить наличие группы во второых списках
+                if (listOfGroupedElements.IsUnique(removed)){
+                    //Группа уникальна в первом списке и уникальна для глубоких списков. Добавить группу во вторые списки
+                    listOfGroupedElements.AddGroup(removed);
+                }
+                else {
+                    //группа уникальна в первом списке, но неуникален для глубоких списков. Мержить группы по мере поиска
+                    listOfGroupedElements.Merge(removed);
                 }
             }
 
-
-
-            /*boolean adding = false;
-            for (int j=0;j<backGroupList.size();j++){
-                if (backGroupList.get(j).canMerge(tlhs)){
-                    backGroupList.get(j).Merge(tlhs, tlal);
-                    merging = true;
-                }
-            }*/
-            if (!merging)
-                backGroupList.add(new BackGroup(tlhs,tlal));
         }
-        else {
-            boolean grouping = false;
-            ArrayList<Integer> counter = new ArrayList<>();
-            int offset = 0;
-            for (int i = 0; i < backGroupList.size(); i++) {
-                if (backGroupList.get(i - offset).add_if_any_set_contains(tripleLong)) {
-                    grouping = true;
-                    counter.add(i - offset);
-                    if (counter.size() == 2) {
-                        System.out.println("Merging groups");
-                        backGroupList.get(counter.get(0)).Merge(backGroupList.get(counter.get(1)));
-                        counter.remove(1);
-                        backGroupList.remove(i - offset);
-                        offset++;
-                    }
-                }
+        else
+        {
+            //Трипллонг уникален в первом списке, проверить наличие трипллонга во второых списках
+            if (listOfGroupedElements.IsUnique(tripleLong)){
+                // Трипллонг уникален для всего вычисления. Записать трипллонг в группу уникальных трипллонгов
+                uniqueElementsGroup.Add(tripleLong);
             }
-            if (!grouping) {
-                frontGroup.Add(tripleLong);
+            else
+            {
+                //Трипллонг уникален в первом списке, но неуникален для глубоких списков. Мержить группы по мере поиска
+                listOfGroupedElements.Merge(tripleLong);
             }
-
         }
     }
 }

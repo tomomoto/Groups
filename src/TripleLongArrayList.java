@@ -1,9 +1,5 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 
-/**
- * Created by Tom on 23.03.2017.
- */
 public class TripleLongArrayList {
 
     private ArrayList<Long> ALongArray;
@@ -21,6 +17,13 @@ public class TripleLongArrayList {
         this.ALongArray = ALongArray;
         this.BLongArray = BLongArray;
         this.CLongArray = CLongArray;
+    }
+
+    public TripleLongArrayList(TripleLong tripleLong) {
+        ALongArray = new ArrayList<>();
+        BLongArray = new ArrayList<>();
+        CLongArray = new ArrayList<>();
+        Add(tripleLong);
     }
 
     public ArrayList<Long> getALongArray() {
@@ -65,6 +68,13 @@ public class TripleLongArrayList {
         return (add || add1 || add2);
     }
 
+    public boolean Add(TripleLongArrayList tripleLongArrayList){
+        boolean add = ALongArray.addAll(tripleLongArrayList.ALongArray);
+        boolean add1 = BLongArray.addAll(tripleLongArrayList.BLongArray);
+        boolean add2 = CLongArray.addAll(tripleLongArrayList.CLongArray);
+        return (add || add1 || add2);
+    }
+
     public ArrayList<Long> getAArray (){
         return ALongArray;
     }
@@ -76,19 +86,6 @@ public class TripleLongArrayList {
     public ArrayList<Long> getCArray (){
         return CLongArray;
     }
-
-    public int GetIndexByA (Long el){
-        return ALongArray.indexOf(el);
-    }
-
-    public int GetIndexByB (Long el){
-        return BLongArray.indexOf(el);
-    }
-
-    public int GetIndexByC (Long el){
-        return CLongArray.indexOf(el);
-    }
-
 
     public void Remove(int index){
         ALongArray.remove(index);
@@ -104,5 +101,26 @@ public class TripleLongArrayList {
             return  asize;
         else
             return 0;
+    }
+
+    public TripleLong RemoveRowByAValue(Long value) {
+        int i = ALongArray.indexOf(value);
+        TripleLong tripleLong = Get(i);
+        Remove(i);
+        return tripleLong;
+    }
+
+    public TripleLong RemoveRowByBValue(Long value) {
+        int i = BLongArray.indexOf(value);
+        TripleLong tripleLong = Get(i);
+        Remove(i);
+        return tripleLong;
+    }
+
+    public TripleLong RemoveRowByCValue(Long value) {
+        int i = CLongArray.indexOf(value);
+        TripleLong tripleLong = Get(i);
+        Remove(i);
+        return tripleLong;
     }
 }
